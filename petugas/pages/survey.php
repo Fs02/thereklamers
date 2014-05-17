@@ -89,47 +89,6 @@
       <td>&nbsp;</td>
     </tr>
     
-    <tr>
-      <td>&nbsp;</td>
-      <td><strong>LAPANGAN</strong></td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td><span class="style6">ID Lokasi</span></td>
-      <td>:</td>
-      <td><label>
-      <input type="text" name="id_lpg" id="id_lpg" />
-      </label></td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>Kelurahan</td>
-      <td>:</td>
-      <td><label>
-      <input type="text" name="kel" id="kel" />
-      </label></td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>Kecamatan</td>
-      <td>&nbsp;</td>
-      <td><label>
-        <input type="text" name="kec" id="kec" />
-      </label></td>
-      <td>&nbsp;</td>
-    </tr>
     
     <tr>
       <td>&nbsp;</td>

@@ -17,6 +17,10 @@ if (isset($_POST['submit']))  {
 	$merek = $_POST['merek'];
 	$jenis = $_POST['jenis'];
 	$ukuran = $_POST['pj'] + ' ' + $_POST['lb'];
+	$kelurahan = $_POST['kel'];
+	$kecamatan = $_POST['kec'];
+	$tanggal_awal = $_POST['tgl_awal'];
+	$tanggal_akhir = $_POST['tgl_akhir'];
 	//cek extensi
 
 	//validasi data jika nama dan pesan kosong
@@ -40,7 +44,7 @@ if (isset($_POST['submit']))  {
 		if (empty(mysql_fetch_array($query, MYSQL_ASSOC)))
 		{ 
 			//Masukan data ke Table Pemohon
-			$sql = "INSERT INTO pemohon VALUES('$no_ktp','$nama','$alamat','$no_telp')";
+			$sql = "INSERT INTO pemohon VALUES('$no_ktp','$nama','$alamat','$no_telp','Belum Diverifikasi')";
 			$query = mysql_query($sql);
 		}
 		
@@ -57,6 +61,33 @@ if (isset($_POST['submit']))  {
 		//Masukan data ke Table Pemohon
 		$sql = "INSERT INTO reklame VALUES(NULL, '$merek','$jenis','$ukuran','$id_perusahaan')";
 		$query = mysql_query($sql);
+
+		//cek apakah lapangan sudah terdaftar
+		$sql = "SELECT * FROM lapangan where kelurahan='$kelurahan' AND kecamatan='$kecamatan'";
+		$query = mysql_query($sql);
+		if (empty(mysql_fetch_array($query, MYSQL_ASSOC)))
+		{ 
+			//Masukan data ke Table Lapangan
+			$sql = "INSERT INTO lapangan VALUES(NULL, '$kelurahan', '$kecamatan')";
+			$query = mysql_query($sql);
+		}
+		
+		//Dapatkan id perusahaan
+		$sql = "SELECT id_reklame FROM reklame WHERE merek='$merek' AND jenis='$jenis' AND ukuran='$ukuran' AND id_perusahaan='$id_perusahaan'";
+		$query = mysql_query($sql);
+		$result = mysql_fetch_row($query);
+		$id_reklame = $result[0];
+		
+		//Dapatkan id perusahaan
+		$sql = "SELECT id_lokasi FROM lapangan WHERE kelurahan='$kelurahan' AND kecamatan='$kecamatan'";
+		$query = mysql_query($sql);
+		$result = mysql_fetch_row($query);
+		$id_lokasi = $result[0];
+		
+		//masukan data ke table dipasang
+		$sql = "INSERT INTO dipasang VALUES(NULL, '$tanggal_awal','$tanggal_akhir', '$id_reklame', '$id_lokasi');";
+		$query = mysql_query($sql);
+		
 		if ($query)
 		{
 			?>
@@ -194,7 +225,61 @@ if (isset($_POST['submit']))  {
 				<td valign="top">MEREK REKLAME</td>
 		  <td><input type="text" name="merek" size="45" maxlength="50" id="isian2"></td>
 		</tr>
-	
+		<tr>
+			  <td width="50" height="30">&nbsp;</td>
+				<td width="0" valign="top">TANGGAL MULAI</td>
+				<td align="left" valign="top" height="40">
+					<input type="text" name="tgl_awal" title="dd-mm-yyyy" size="15" valign="top">
+					<a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fPopCalendar(document.input.tgl);return false;" >
+					<img valign="bottom" name="popcal" src="menu/calender/calender.png" alt="" width="20" height="20"></a>				</td>
+		</tr>
+		<tr>
+			  <td width="50" height="28">&nbsp;</td>
+				<td width="0" valign="top">TANGGAL BERAKHIR</td>
+				<td align="left" valign="top" height="28">
+					<input type="text" name="tgl_akhir" title="dd-mm-yyyy" size="15" valign="top">
+					<a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fPopCalendar(document.input.tgl);return false;" >
+					<img valign="bottom" name="popcal" src="menu/calender/calender.png" alt="" width="20" height="20"></a>				</td>
+		</tr>
+		<tr>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+    </tr>
+		<tr>
+      <td>&nbsp;</td>
+      <td><strong>LAPANGAN</strong></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>KELURAHAN</td>
+      <td><input type="text" name="kel" id="kel" /></td>
+      <td><label></label></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>KECAMATAN</td>
+      <td><input type="text" name="kec" id="kec" /></td>
+      <td><label></label></td>
+    </tr>
+    
+		<tr>
+		  <td height="28">&nbsp;</td>
+		  <td valign="top">&nbsp;</td>
+		  <td valign="top">&nbsp;</td>
+    </tr>
 		<tr>
 			  <td width="50" height="28">&nbsp;</td>
 				<td width="0" valign="top">UKURAN REKLAME</td>
