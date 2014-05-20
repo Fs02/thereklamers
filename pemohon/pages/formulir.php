@@ -1,6 +1,7 @@
 <title>Data Pemohon</title>
 <FORM METHOD="POST" NAME="input" enctype="multipart/form-data">
-<?php
+  <h1>
+    <?php
 //Cek Tombol 
 if (isset($_POST['submit']))  {
 	//Kirimkan Variabel
@@ -27,10 +28,10 @@ if (isset($_POST['submit']))  {
 	if (empty($_POST['no_telp'])|| empty($_POST['nama'])/* || ($_POST['kategori']=="--Pilih Kategori--") */) 
 	{
 		?>
-		<script language="JavaScript">
+    <script language="JavaScript">
 		alert('Data Harap Dilengkapi');
 		</script>
-		<?php
+    <?php
 	}
 	//Jika Validasi Terpenuhi
 	else
@@ -87,29 +88,36 @@ if (isset($_POST['submit']))  {
 		//masukan data ke table dipasang
 		$sql = "INSERT INTO dipasang VALUES(NULL, '$tanggal_awal','$tanggal_akhir', '$id_reklame', '$id_lokasi');";
 		$query = mysql_query($sql);
+
+		$sql = "SELECT id_pemasangan FROM dipasang WHERE tanggal_awal='$tanggal_awal' AND tanggal_akhir='$tanggal_akhir' AND id_reklame='$id_reklame' AND id_lokasi='$id_lokasi'";
+		$query = mysql_query($sql);
+		$result = mysql_fetch_row($query);
+		$id_pemasangan = $result[0];
 		
 		if ($query)
 		{
 			?>
-			<script language="JavaScript">
+    <script language="JavaScript">
 				alert('Data Berhasil diinput');
 			</script>
-			<?php
-	
+    => <em>NOMOR PEMASANGAN ANDA ADALAH</em> :
+    <?php	
+			echo $id_pemasangan; 
 		}
 		else
 		{
 			//Jika Gagal
 			?>
-			<script language="JavaScript">
+    <script language="JavaScript">
 			alert('Data Gagal di input, Silahkan ulangi lagi');
 			</script>
-			<?php
+    <?php
 		}
 	}
 }
 ?>
-<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" id="tabel2" >	
+  </h1>
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" id="tabel2" >	
 	<tr height="30px" style="font-size:16px; color:white;">
 			<th colspan="4" bgcolor="#952b33">REGISTRASI</th>
 	</tr>
@@ -180,18 +188,14 @@ if (isset($_POST['submit']))  {
 			?>
 			<select name="jenis_perusahaan" id="kategori" width="50">
 				<option>--Pilih Jenis Perusahaan--</option>
-				<?php
-				//mengambil nama-nama propinsi yang ada di database
-				$propinsi = mysql_query("SELECT * FROM tbl_kategori ORDER BY id");
-				while($p=mysql_fetch_array($propinsi)){
-					echo "<option value=\"$p[cat]\">$p[cat]</option>\n";
-				}
-				?>
+				<option>Manufaktur</option>
+				<option>Dagang</option>
+				<option>Jasa</option>
 			</select>		</td>
-			</tr>
+	</tr>
 		<tr>
 			  <td>&nbsp;</td>
-					<tr>
+	<tr>
 		<td width="50" height="30" >&nbsp;</td>
 		<td width="0" valign="middle">JENIS USAHA</td>
 		<td>
@@ -200,16 +204,14 @@ if (isset($_POST['submit']))  {
 			?>
 			<select name="jenis_usaha" id="sub" width="50" >
 				<option>--Pilih Jenis Usaha--</option>
-				<?php
-				//mengambil nama-nama propinsi yang ada di database
-				$kota = mysql_query("SELECT * FROM tbl_kategori_sub");
-				while($p=mysql_fetch_array($propinsi)){
-					echo "<option value=\"$p[id_c]\">$p[cat]</option>\n";
-				}
-				echo "<option value=\"$p[cat]\">$p[cat]</option>\n";
-				?>
+				<option>Computer and Software</option>
+				<option>Hiburan</option>
+				<option>Asuransi</option>
+				<option>Perbankan</option>
+				<option>Tambang</option>
+				<option>Makanan dan Minuman</option>
 			</select>		</td>
-		</tr>
+	</tr>
 			<tr>
 			  <td height="41">&nbsp;</td>
 				<td></td>
@@ -229,7 +231,7 @@ if (isset($_POST['submit']))  {
 			  <td width="50" height="30">&nbsp;</td>
 				<td width="0" valign="top">TANGGAL MULAI</td>
 				<td align="left" valign="top" height="40">
-					<input type="text" name="tgl_awal" title="dd-mm-yyyy" size="15" valign="top">
+					<input type="text" name="tgl_awal" title="yyyy-mm-dd" size="15" valign="top">
 					<a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fPopCalendar(document.input.tgl);return false;" >
 					<img valign="bottom" name="popcal" src="menu/calender/calender.png" alt="" width="20" height="20"></a>				</td>
 		</tr>
@@ -237,7 +239,7 @@ if (isset($_POST['submit']))  {
 			  <td width="50" height="28">&nbsp;</td>
 				<td width="0" valign="top">TANGGAL BERAKHIR</td>
 				<td align="left" valign="top" height="28">
-					<input type="text" name="tgl_akhir" title="dd-mm-yyyy" size="15" valign="top">
+					<input type="text" name="tgl_akhir" title="yyyy-mm-dd" size="15" valign="top">
 					<a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fPopCalendar(document.input.tgl);return false;" >
 					<img valign="bottom" name="popcal" src="menu/calender/calender.png" alt="" width="20" height="20"></a>				</td>
 		</tr>
@@ -298,13 +300,9 @@ if (isset($_POST['submit']))  {
 			?>
 			<select name="jenis" id="kategori" width="50">
 				<option>--Pilih Kategori--</option>
-				<?php
-				//mengambil nama-nama propinsi yang ada di database
-				$propinsi = mysql_query("SELECT * FROM tbl_kategori ORDER BY id");
-				while($p=mysql_fetch_array($propinsi)){
-					echo "<option value=\"$p[cat]\">$p[cat]</option>\n";
-				}
-				?>
+				<option>Komersil</option>
+				<option>Event</option>
+				<option>Himbauan Umum</option>
 			</select>		</td>
 	
 		
@@ -345,5 +343,5 @@ if (isset($_POST['submit']))  {
 						<input type="submit" name="submit" value="submit" id="tombol">
 					&nbsp;<input type="reset" name="reset" value="Reset" id="tombol"></td>
 			</tr>
-		</table>
+  </table>
 </FORM>

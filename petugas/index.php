@@ -1,3 +1,6 @@
+<?php
+define('ROOT_DIR',dirname(__FILE__) . '/');
+?>
 <html>
 	<head>
 		<title>Aplikasi Pemasangan Reklame</title>

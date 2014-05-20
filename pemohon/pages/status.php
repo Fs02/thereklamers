@@ -12,7 +12,7 @@
 <p><strong>Pencarian Nama Pemohon / ID Perusahaan</strong><br>
   <br>
 </p>
-<form action="" method="post" name="pencarian" >
+<form action="" method="POST" name="pencarian" >
   <input type="text" name="search" id="isian">
   <input type="submit" name="submit" id="tombol" value="CARI"><br>
   &nbsp;<br>&nbsp;
@@ -41,22 +41,22 @@
 <tr>
 <td width='243'><span class="style1">STATUS VALIDASI DATA</span></td>
 <td width='10'>:</td>
-<td width="808"><span class="style1">VALID</span></td>
+<td width="808"><span class="style1">-</span></td>
 </tr>
 <tr>
 <td width='243'><span class="style1">STATUS SURVEY LAPANGAN</span></td>
 <td width='10'>:</td>
-<td><span class="style1">VALID</span></td>
+<td><span class="style1">-</span></td>
 </tr>
 <tr>
 <td width='243'><span class="style1">STATUS PERIZINAN</span></td>
 <td width='10'>:</td>
-<td><span class="style1">VALID</span></td>
+<td><span class="style1">-</span></td>
 </tr>
 <tr>
 <td width='243'><span class="style1">STATUS PEMBAYARAN</span></td>
 <td width='10'>:</td>
-<td><span class="style1">BELUM LUNAS</span></td>
+<td>-</td>
 </tr>
 
 </table><br>
@@ -78,11 +78,11 @@
 	</tr><tr>
 		<td align='center' width='20px'><span class="style1">2</span></td>
 		<td><span class="style1">PROSES PEMBAYARAN</span></td>
-		<td align='center'><span class="style1">SUDAH</span></td>
+		<td align='center'><span class="style1">BELUM</span></td>
 	</tr><tr>
 		<td align='center' width='20px'><span class="style1">3</span></td>
 		<td><span class="style1">PROSES PENCETAKAN SURAT IZIN</span></td>
-		<td align='center'><span class="style1">SUDAH</span></td>
+		<td align='center'><span class="style1">BELUM</span></td>
 	</tr></tbody></table>
 <br>
 	<div>

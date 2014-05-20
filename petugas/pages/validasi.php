@@ -1,3 +1,75 @@
+<FORM METHOD="POST" NAME="input" enctype="multipart/form-data">
+<?php
+//Cek Tombol 
+if (isset($_POST['submit']))  
+	{
+	
+	//cek valudasi
+		if (isset($_POST['check']))
+		{
+			$strCheck = implode(",", $_POST['check']); 
+		}
+		else
+		{
+			$strCheck = "";
+		}
+			echo "Check in: " . $strCheck;
+			exit();
+	
+	
+	//Kirimkan Variabel
+	$no_resi = $_POST['no_resi'];
+	$tanggal = $_POST['tanggal'];
+	$no_ktp = $_POST['no_ktp'];
+	$id_petugas= $_POST['nama_perusahaan'];
+	
+	//validasi data jika nama dan pesan kosong
+	if (empty($_POST['no_resi'])|| empty($_POST['no_resi'])/* || ($_POST['kategori']=="--Pilih Kategori--") */) 
+	{
+		?>
+		<script language="JavaScript">
+		alert('Data Harap Dilengkapi');
+		</script>
+		<?php
+	}
+	//Jika Validasi Terpenuhi
+	else
+	{
+		//Memanggil File Koneksi Database
+		include ROOT_DIR."koneksi.php";
+	
+		//cek apakah pemohon sudah terdaftar
+		$sql = "SELECT * FROM pemohon where no_ktp = '$no_ktp'";
+		$query = mysql_query($sql);
+		if (empty(mysql_fetch_array($query, MYSQL_ASSOC)))
+				{ 
+		//Masukan data ke Table Resi
+			$sql = "INSERT INTO resi VALUES('$no_resi','$tanggal','$no_ktp','$id_petugas','')";
+			$query = mysql_query($sql);
+		
+		if ($query)
+		{
+			?>
+			<script language="JavaScript">
+				alert('Data Berhasil diinput');
+			</script>
+			<?php
+	
+		}
+		else
+		{
+			//Jika Gagal
+			?>
+			<script language="JavaScript">
+			alert('Data Gagal di input, Silahkan ulangi lagi');
+			</script>
+			<?php
+		}
+		}
+	}
+}
+?>
+
 <style type="text/css">
 <!--
 .style6 {font-family: "Times New Roman", Times, serif}
@@ -38,7 +110,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
       <td width="105"><span class="style6">ID Resi</span></td>
       <td width="6">:</td>
       <td width="415"><label>
-        <input type="text" name="id_resi" id="id_resi" />
+        <input type="text" name="no_resi" id="id_resi" />
       </label></td>
       <td width="81">&nbsp;</td>
     </tr>
@@ -47,18 +119,18 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
       <td><span class="style6">Tanggal Resi</span></td>
       <td>:</td>
       <td align="left" valign="top" height="40">
-					<input type="text" name="tgl" title="dd-mm-yyyy" size="15" valign="top" value="" >
-					<a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fPopCalendar(document.edit.tgl);return false;" >
-					<img valign="bottom" name="popcal" src="menu/calender/calender.png" alt="" width="20" height="20"></a>
+					<input type="text" name="tgl" title="dd-mm-yyyy" size="15" valign="top">
+					<a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fPopCalendar(document.validasi.tanggal);return false;" >
+					<img valign="bottom" name="popcal" src="pages/calender/calender.png" alt="" width="20" height="20"></a>
 				</td>
       <td>&nbsp;</td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td><span class="style6">Nama Pemohon</span></td>
+      <td><span class="style6">No KTP</span></td>
       <td>:</td>
       <td><label>
-        <input type="text" name="nama" id="nama" />
+        <input type="text" name="no_ktp" id="nama" />
       </label></td>
       <td>&nbsp;</td>
     </tr>
@@ -67,7 +139,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
       <td><span class="style6">ID Petugas</span></td>
       <td>:</td>
       <td><label>
-        <input type="text" name="id_ptg" id="id_ptg" />
+        <input type="text" name="id_petugas" id="id_ptg" />
       </label></td>
       <td>&nbsp;</td>
     </tr>
@@ -76,7 +148,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
       <td><span class="style6">Nama Petugas</span></td>
       <td>:</td>
       <td><label>
-        <input type="text" name="nama_ptg" id="nama_ptg" />
+        <input type="text" name="nama_petugas" id="nama_ptg" />
       </label></td>
       <td>&nbsp;</td>
     </tr>
@@ -104,83 +176,69 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
   </table>
   <label><br />
   </label>
-  <table width="699" border="0">
+  <table width="699" border="0" method="post">
     <tr>
       <td width="95">&nbsp;</td>
-      <td width="20"><label>
-        <input type="checkbox" name="Nama_pemohon" id="Nama_pemohon" />
-      </label></td>
-      <td width="234"><span class="style6">Nama Pemohon</span></td>
-      <td width="20"><label>
-        <input type="checkbox" name="npwp" id="npwp" />
-      </label></td>
-      <td width="308"><span class="style6">NPWP</span></td>
+      <td width="20">&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="Nama Pemohon" checked="checked" id="check[]"/>
+      <label for="check[]">Nama Pemohon</label></td>
+      <td width="20">&nbsp;</td>
+      <td width="308"><input type="checkbox" name="check[]" value="NPWP" checked="checked" id="check[]"/>
+      <label for="check[]">NPWP</label></td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td><label>
-        <input type="checkbox" name="No_ktp" id="No_ktp" />
-      </label></td>
-      <td><span class="style6">No. KTP</span></td>
-      <td><label>
-        <input type="checkbox" name="jns_per" id="jns_per" />
-      </label></td>
-      <td><span class="style6">Jenis Perusahan</span></td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="No. KTP" checked="checked" id="check[]"/>
+      		<label for="check[]">No. KTP</label>      </td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="Jenis Perusahan" checked="checked" id="check[]"/>
+      <label for="check[]">Jenis Perusahan</label></td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td><label>
-        <input type="checkbox" name="No_tlp1" id="No_tlp1" />
-      </label></td>
-      <td><span class="style6">No. Telepon</span></td>
-      <td><label>
-        <input type="checkbox" name="jns_ush" id="jns_ush" />
-      </label></td>
-      <td><span class="style6">Jenis Usaha</span></td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="No. Telepon" checked="checked" id="check[]"/>
+      <label for="check[]">No. Telepon</label>      </td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="Jenis Usaha" checked="checked" id="check[]"/>
+      <label for="check[]">Jenis Usaha</label>      </td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td><label>
-        <input type="checkbox" name="Alamat" id="Alamat" />
-      </label></td>
-      <td><span class="style6">Alamat</span></td>
-      <td><label>
-        <input type="checkbox" name="id_reklame" id="id_reklame" />
-      </label></td>
-      <td><span class="style6">ID Reklame</span></td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="Alamat" checked="checked" id="check[]"/>
+      <label for="check[]">Alamat</label>      </td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="ID Reklame" checked="checked" id="check[]"/>
+      <label for="check[]">ID Reklame</label>      </td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td><label>
-        <input type="checkbox" name="Id_perusahaan" id="Id_perusahaan" />
-      </label></td>
-      <td><span class="style6">ID Perusahaan</span></td>
-      <td><label>
-        <input type="checkbox" name="merek" id="merek" />
-      </label></td>
-      <td><span class="style6">Merek Reklame</span></td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="ID Perusahaan" checked="checked" id="check[]"/>
+      <label for="check[]">ID Perusahaan</label></td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="Merek Reklame" checked="checked" id="check[]"/>
+      <label for="check[]">Merek Reklame</label></td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td><label>
-        <input type="checkbox" name="Nama_perusahaan" id="Nama_perusahaan" />
-      </label></td>
-      <td><span class="style6">Nama Perusahaan</span></td>
-      <td><label>
-        <input type="checkbox" name="ukuran" id="ukuran" />
-      </label></td>
-      <td><span class="style6">Ukuran Reklame</span></td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="Nama Perusahaan" checked="checked" id="check[]"/>
+      <label for="check[]">Nama Perusahaan</label></td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="Ukuran Reklame" checked="checked" id="check[]"/>
+      <label for="check[]">Ukuran Reklame</label></td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td><label>
-        <input type="checkbox" name="No_Tlp2" id="No_Tlp2" />
-      </label></td>
-      <td><span class="style6">No. Telepon</span></td>
-      <td><label>
-        <input type="checkbox" name="jns_reklame" id="jns_reklame" />
-      </label></td>
-      <td><span class="style6">Jenis Reklame</span></td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="No. Telepon" checked="checked" id="check[]"/>
+      <label for="check[]">No. Telepon</label></td>
+      <td>&nbsp;</td>
+      <td><input type="checkbox" name="check[]" value="Jenis Reklame" checked="checked" id="check[]"/>
+      <label for="check[]">Jenis Reklame</label></td>
     </tr>
   </table>
   <label><br />
