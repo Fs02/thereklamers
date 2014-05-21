@@ -8,6 +8,10 @@ define('ROOT_DIR',dirname(__FILE__) . '/');
 		<link href="asset/style.css" rel="stylesheet" type="text/css">
 		<style type="text/css">
 		.style1 {color: #952b33}
+        .style2 {
+	font-size: 16px;
+	font-weight: bold;
+}
         </style>
 		<script type="text/javascript" src="asset/jquery.js"></script>
 		<script type="text/javascript">
@@ -66,6 +70,7 @@ define('ROOT_DIR',dirname(__FILE__) . '/');
 				$page = (isset($_GET['page']))? $_GET['page'] : "beranda";
 				switch ($page) {
 					case 'beranda': include "pages/beranda.php"; break;
+					case 'daftar' : include "pages/waitinglist.php"; break;
 					case 'validasi': include "pages/validasi.php"; break;
 					case 'survey'	: include "pages/survey.php"; break;
 					case 'perizinan' : include "pages/perizinan.php"; break;
@@ -83,9 +88,13 @@ define('ROOT_DIR',dirname(__FILE__) . '/');
 			<table width="101%" border="0" align="center" valign="middle">
 				<tr><td > </td></tr>
 				<tr><td height="4"> </td></tr>
-				<tr id="utama"> <td>
+				<tr id="utama"> <td height="32">
 					<strong><img src="asset/home.png" width="30" height="30" align="middle"> 
 					<a color="white" href="index.php?page=beranda" title="Halaman Awal" style="text-decoration: none;" ><font color="white">BERANDA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a></strong></td>
+				</tr>
+       			<tr id="utama"> <td height="32">
+					<strong><img src="asset/wl.jpg" width="30" height="30" align="middle"> 
+					<a color="white" href="index.php?page=daftar" title="Halaman Awal" style="text-decoration: none;" ><font color="white">DAFTAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a></strong></td>
 				</tr>
 				<tr id="utama"> <td>
 					<strong><img src="asset/lihat.png" width="30" height="30" align="middle"> 

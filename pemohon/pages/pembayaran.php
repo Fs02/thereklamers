@@ -13,8 +13,8 @@
 				<td width="0" valign="top">TANGGAL</td>
 				<td align="left" valign="top" height="40">
 					<input type="text" name="tgl" title="dd-mm-yyyy" size="15" valign="top" value="" >
-					<a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fPopCalendar(document.edit.tgl);return false;" >
-					<img valign="bottom" name="popcal" src="menu/calender/calender.png" alt="" width="20" height="20"></a>
+					<a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fPopCalendar(document.pembayaran.tgl);return false;" >
+					<img valign="bottom" name="popcal" src="pages/calender/calender.png" alt="" width="20" height="20"></a>
 				</td>
 		</tr>
 		<tr>

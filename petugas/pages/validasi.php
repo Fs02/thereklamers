@@ -1,73 +1,71 @@
 <FORM METHOD="POST" NAME="input" enctype="multipart/form-data">
 <?php
-//Cek Tombol 
-if (isset($_POST['submit']))  
+	
+	//Cek Tombol 
+	if (isset($_POST['Submit']))  
 	{
 	
-	//cek valudasi
+	/*	//cek valudasi
 		if (isset($_POST['check']))
 		{
 			$strCheck = implode(",", $_POST['check']); 
-		}
-		else
-		{
+		}else{
 			$strCheck = "";
 		}
-			echo "Check in: " . $strCheck;
-			exit();
-	
+		echo "Check in: " . $strCheck;
+		exit();
+	*/
 	
 	//Kirimkan Variabel
-	$no_resi = $_POST['no_resi'];
-	$tanggal = $_POST['tanggal'];
-	$no_ktp = $_POST['no_ktp'];
-	$id_petugas= $_POST['nama_perusahaan'];
-	
+		$no_ktp = $_POST['no_ktp'];
+		$id_petugas= $_POST['id_petugas'];
+		$validasi= $_POST['validasi'];
 	//validasi data jika nama dan pesan kosong
-	if (empty($_POST['no_resi'])|| empty($_POST['no_resi'])/* || ($_POST['kategori']=="--Pilih Kategori--") */) 
-	{
-		?>
-		<script language="JavaScript">
-		alert('Data Harap Dilengkapi');
-		</script>
-		<?php
-	}
-	//Jika Validasi Terpenuhi
-	else
-	{
-		//Memanggil File Koneksi Database
-		include ROOT_DIR."koneksi.php";
-	
-		//cek apakah pemohon sudah terdaftar
-		$sql = "SELECT * FROM pemohon where no_ktp = '$no_ktp'";
-		$query = mysql_query($sql);
-		if (empty(mysql_fetch_array($query, MYSQL_ASSOC)))
-				{ 
-		//Masukan data ke Table Resi
-			$sql = "INSERT INTO resi VALUES('$no_resi','$tanggal','$no_ktp','$id_petugas','')";
-			$query = mysql_query($sql);
-		
-		if ($query)
+		if (empty($_POST['no_ktp'])|| empty($_POST['id_petugas'])/* || ($_POST['kategori']=="--Pilih Kategori--") */) 
 		{
 			?>
-			<script language="JavaScript">
-				alert('Data Berhasil diinput');
-			</script>
+				<script language="JavaScript">
+				alert('Data Harap Dilengkapi');
+				</script>
 			<?php
-	
 		}
+	
+	//Jika Validasi Terpenuhi
 		else
 		{
-			//Jika Gagal
-			?>
-			<script language="JavaScript">
-			alert('Data Gagal di input, Silahkan ulangi lagi');
-			</script>
-			<?php
-		}
+			//Memanggil File Koneksi Database
+			include "koneksi.php";
+			//cek apakah id petugas sudah terdaftar
+			$sql = "SELECT * FROM petugas where id_petugas = $id_petugas";
+			$query = mysql_query($sql);
+			
+			//Masukan data ke Table Resi
+			$sql = "INSERT INTO `resi`(`tanggal`, `no_ktp`, `id_petugas`) VALUES (SYSDATE(),$no_ktp,$id_petugas)";
+			$query = mysql_query($sql);
+			
+			$sql = "UPDATE `pemohon` SET `status`='$validasi' WHERE no_ktp=$no_ktp";
+			$query = mysql_query($sql);
+			
+			if ($query)
+			{
+				?>
+					<script language="JavaScript">
+						alert('Data Berhasil diinput');
+					</script>
+				<?php
+			}
+			else
+			{
+				//Jika Gagal
+				?>
+					<script language="JavaScript">
+					alert('Data Gagal di input, Silahkan ulangi lagi');
+					</script>
+				<?php
+			}
+		
 		}
 	}
-}
 ?>
 
 <style type="text/css">
@@ -92,37 +90,17 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 <form id="form2" name="form2" method="post" action="">
   <table width="770" border="0">
     <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
       <td width="71">&nbsp;</td>
-      <td width="105"><span class="style6">ID Resi</span></td>
-      <td width="6">:</td>
-      <td width="415"><label>
-        <input type="text" name="no_resi" id="id_resi" />
-      </label></td>
+      <td width="105">&nbsp;</td>
+      <td width="6">&nbsp;</td>
+      <td width="415">&nbsp;</td>
       <td width="81">&nbsp;</td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td><span class="style6">Tanggal Resi</span></td>
-      <td>:</td>
-      <td align="left" valign="top" height="40">
-					<input type="text" name="tgl" title="dd-mm-yyyy" size="15" valign="top">
-					<a href="javascript:void(0)" onClick="if(self.gfPop)gfPop.fPopCalendar(document.validasi.tanggal);return false;" >
-					<img valign="bottom" name="popcal" src="pages/calender/calender.png" alt="" width="20" height="20"></a>
-				</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
       <td>&nbsp;</td>
     </tr>
     <tr>
@@ -247,7 +225,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     <tr>
       <td width="63">&nbsp;</td>
       <td width="144"><span class="style6">Status Validasi</span></td>
-      <td width="101"><select name="jumpMenu" id="jumpMenu" onchange="MM_jumpMenu('parent',this,0)">
+      <td width="101"><select name="validasi" id="validasi" onchange="MM_jumpMenu('parent',this,0)">
         <option>Valid</option>
         <option>Tidak Valid</option>
       </select></td>

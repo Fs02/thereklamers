@@ -6,10 +6,11 @@
 if (isset($_POST['submit']))  {
 	//Kirimkan Variabel
 	$no_ktp = $_POST['no_ktp'];
+	$email = $_POST['email'];
 	$nama_perusahaan= $_POST['nama_perusahaan'];
 	$jenis_perusahaan= $_POST['jenis_perusahaan'];
 	$jenis_usaha= $_POST['jenis_usaha'];
-	$NPWP= $_POST['NPWP'];
+	$npwp= $_POST['NPWP'];
 	$rk = $_POST['pj'];
 	$dp = $_POST['lb'];
 	$no_telp = $_POST['no_telp'];
@@ -39,79 +40,149 @@ if (isset($_POST['submit']))  {
 		//Memanggil File Koneksi Database
 		include ROOT_DIR."koneksi.php";
 	
-		//cek apakah pemohon sudah terdaftar
-		$sql = "SELECT * FROM pemohon where no_ktp = '$no_ktp'";
+		/*
+		 * Perusahaan
+		 * Logic :
+		 * - Cek apakah perusahaan telah terdaftar
+		 * - Jika sudah terisi -> update
+		 * - jika belum -> insert
+		 */
+		$sql = "SELECT * FROM perusahaan where nama_perusahaan = '$nama_perusahaan' AND npwp = '$npwp'";
 		$query = mysql_query($sql);
-		if (empty(mysql_fetch_array($query, MYSQL_ASSOC)))
-		{ 
-			//Masukan data ke Table Pemohon
-			$sql = "INSERT INTO pemohon VALUES('$no_ktp','$nama','$alamat','$no_telp','Belum Diverifikasi')";
-			$query = mysql_query($sql);
+		if (empty(mysql_fetch_array($query, MYSQL_ASSOC))){
+			$sql="INSERT INTO perusahaan VALUES(NULL,'$nama_perusahaan','$jenis_usaha','$jenis_perusahaan','$no_telp','$npwp','Belum diverifikasi')";
+	    } else {
+			$sql="UPDATE perusahaan SET nama_perusahaan='$nama_perusahaan', jenis_usaha='$jenis_usaha', jenis_perusahaan='$jenis_perusahaan', no_telp='$no_telp',status='Belum diverifikasi' WHERE nama_perusahaan = '$nama_perusahaan' AND npwp = '$npwp'";
+		}
+		$query=mysql_query($sql);
+		if (!$query){
+			echo "ERROR : Kesalahan terjadi saat menginsert tabel perusahaan";
 		}
 		
-		//Masukan data ke Table Peerusahaan
-		$sql="INSERT INTO perusahaan VALUES(NULL,'$nama_perusahaan','$jenis_usaha','$jenis_perusahaan','$no_telp','$NPWP','$no_ktp')";
-		$query=mysql_query($sql);
-	    
-		//Dapatkan id perusahaan
-		$sql = "SELECT id_perusahaan FROM perusahaan where nama_perusahaan = '$nama_perusahaan' AND jenis_usaha = '$jenis_usaha' AND  jenis_perusahaan = '$jenis_perusahaan' AND no_telp = '$no_telp' AND no_ktp = '$no_ktp'";
+		/*
+		 * Pemohon
+		 * Logic :
+		 * dapatkan id perusahaan
+		 * - Cek apakah sudah terdaftar
+		 * - Jika sudah -> update
+		 * - Jika belum -> insert
+		 */ 
+		$sql = "SELECT id_perusahaan FROM perusahaan WHERE nama_perusahaan = '$nama_perusahaan' AND npwp = '$npwp'";
 		$query = mysql_query($sql);
 		$result = mysql_fetch_row($query);
 		$id_perusahaan = $result[0];
-
-		//Masukan data ke Table Pemohon
-		$sql = "INSERT INTO reklame VALUES(NULL, '$merek','$jenis','$ukuran','$id_perusahaan')";
+		
+		$sql = "SELECT * FROM pemohon where no_ktp = '$no_ktp'";
 		$query = mysql_query($sql);
-
-		//cek apakah lapangan sudah terdaftar
+		if (empty(mysql_fetch_array($query, MYSQL_ASSOC))){ 
+			$sql = "INSERT INTO pemohon VALUES('$no_ktp','$id_perusahaan','$nama','$email','$alamat','$no_telp','Belum Diverifikasi')";
+		} else {
+			$sql = "UPDATE pemohon SET nama='$nama',email='$email',alamat='$alamat', no_telp='$no_telp', status='Belum diverifikasi' ,id_perusahaan='$id_perusahaan' WHERE no_ktp = '$no_ktp'";
+		}
+		$query=mysql_query($sql);
+		if (!$query){
+			echo "ERROR : Kesalahan terjadi saat menginsert tabel pemohon";
+		}
+		
+		/*
+		 * Reklame
+		 * Logic :
+		 * - Cek apakah reklame sudah terdaftar
+		 * - Jika sudah : Update
+		 * - Jika belum : insert
+		 */
+		$sql = "SELECT * FROM reklame WHERE merek='$merek' AND ukuran='$ukuran' AND id_perusahaan='$id_perusahaan'";
+		$query = mysql_query($sql);
+		if (empty(mysql_fetch_array($query, MYSQL_ASSOC))){ 
+			$sql = "INSERT INTO reklame VALUES(NULL, '$merek','$jenis','$ukuran','$id_perusahaan', 'Belum diverifikasi')";
+		} else {
+			$sql = "UPDATE reklame SET jenis='$jenis', status='Belum diverifikasi' WHERE merek='$merek' AND ukuran='$ukuran' AND id_perusahaan='$id_perusahaan'";
+		}
+		$query=mysql_query($sql);
+		if (!$query){
+			echo "ERROR : Kesalahan terjadi saat menginsert tabel reklame";
+		}
+		
+		/*
+		 * Lapangan
+		 * Logic :
+		 * - Cek apakah lapangan sudah ada
+		 * - Jika belum insert
+		 */
 		$sql = "SELECT * FROM lapangan where kelurahan='$kelurahan' AND kecamatan='$kecamatan'";
 		$query = mysql_query($sql);
 		if (empty(mysql_fetch_array($query, MYSQL_ASSOC)))
 		{ 
 			//Masukan data ke Table Lapangan
 			$sql = "INSERT INTO lapangan VALUES(NULL, '$kelurahan', '$kecamatan')";
-			$query = mysql_query($sql);
+		}
+		$query=mysql_query($sql);
+		if (!$query){
+			echo "ERROR : Kesalahan terjadi saat menginsert tabel lapangan";
 		}
 		
-		//Dapatkan id perusahaan
-		$sql = "SELECT id_reklame FROM reklame WHERE merek='$merek' AND jenis='$jenis' AND ukuran='$ukuran' AND id_perusahaan='$id_perusahaan'";
+		/* pemasangan
+		 * Logic:
+		 * - ambil id reklame
+		 * - ambil id lokasi
+		 * - cek apakah data telah ada
+		 * - jika sudah : update
+		 * - jika belum : insert
+		 */
+		$sql = "SELECT id_reklame FROM reklame WHERE merek='$merek' AND ukuran='$ukuran' AND id_perusahaan='$id_perusahaan'";
 		$query = mysql_query($sql);
 		$result = mysql_fetch_row($query);
 		$id_reklame = $result[0];
-		
-		//Dapatkan id perusahaan
+
 		$sql = "SELECT id_lokasi FROM lapangan WHERE kelurahan='$kelurahan' AND kecamatan='$kecamatan'";
 		$query = mysql_query($sql);
 		$result = mysql_fetch_row($query);
 		$id_lokasi = $result[0];
 		
-		//masukan data ke table dipasang
-		$sql = "INSERT INTO dipasang VALUES(NULL, '$tanggal_awal','$tanggal_akhir', '$id_reklame', '$id_lokasi');";
+		$sql = "SELECT * FROM dipasang where id_reklame='$id_reklame'";
 		$query = mysql_query($sql);
-
-		$sql = "SELECT id_pemasangan FROM dipasang WHERE tanggal_awal='$tanggal_awal' AND tanggal_akhir='$tanggal_akhir' AND id_reklame='$id_reklame' AND id_lokasi='$id_lokasi'";
+		if (empty(mysql_fetch_array($query, MYSQL_ASSOC))){ 
+			$sql = "INSERT INTO dipasang VALUES(NULL, '$tanggal_awal','$tanggal_akhir', '$id_reklame', '$id_lokasi');";
+		}
+		else{
+			$sql = "UPDATE dipasang SET tanggal_awal='$tanggal_awal', tanggal_akhir='$tanggal_akhir', id_lokasi='$id_lokasi' WHERE id_reklame='$id_reklame'";
+		}		
+		$query = mysql_query($sql);
+		if (!$query){	
+			echo "ERROR : Kesalahan terjadi saat menginsert tabel dipasang";
+		}
+		
+		/*
+		 * Resi
+		 * Logic:
+		 * - ambil id pemasangan
+		 * - cek apakah resi duplikat :
+		 * - Jika tidak : Insert resi
+		 * - Tampilkan jika sukses
+		 */
+ 		$sql = "SELECT id_pemasangan FROM dipasang where id_reklame='$id_reklame'";
 		$query = mysql_query($sql);
 		$result = mysql_fetch_row($query);
-		$id_pemasangan = $result[0];
-		
-		if ($query)
-		{
-			?>
-    <script language="JavaScript">
-				alert('Data Berhasil diinput');
-			</script>
-    => <em>NOMOR PEMASANGAN ANDA ADALAH</em> :
-    <?php	
-			echo $id_pemasangan; 
+		$id_dipasang = $result[0];
+
+		$current_date = date("Y-m-d H:i:s");
+		$sql = "SELECT * FROM resi where id_pemasangan='$id_dipasang'";
+		$query = mysql_query($sql);
+		if (empty(mysql_fetch_array($query, MYSQL_ASSOC))){ 
+			$sql = "INSERT INTO resi VALUES(NULL,'$current_date','$id_dipasang');";
 		}
-		else
-		{
-			//Jika Gagal
+		$query = mysql_query($sql);
+		if (!$query){	
+			echo "ERROR : Kesalahan terjadi saat menginsert tabel dipasang";
+		} else {
+			$sql = "SELECT no_resi FROM resi WHERE id_pemasangan='$id_dipasang'";
+			$query = mysql_query($sql);
+			$result = mysql_fetch_row($query);
+			$id_resi = $result[0];
 			?>
-    <script language="JavaScript">
-			alert('Data Gagal di input, Silahkan ulangi lagi');
-			</script>
-    <?php
+			=> <em>NOMOR RESI ANDA ADALAH</em> :
+		    <?php	
+			echo $id_resi; 
 		}
 	}
 }
@@ -143,6 +214,11 @@ if (isset($_POST['submit']))  {
 			  <td width="50" height="30">&nbsp;</td>
 				<td width="0" valign="top">NO KTP</td>
 				<td ><input type="text" name="no_ktp" size="45" maxlength="50" id="isian2"></td> 
+		</tr>
+		<tr>
+			  <td width="50" height="30">&nbsp;</td>
+				<td width="0" valign="top">EMAIL</td>
+				<td ><input type="text" name="email" size="45" maxlength="50" id="isian2"></td> 
 		</tr>
 		<tr>
 			  <td width="50" height="30">&nbsp;</td>
