@@ -1,117 +1,116 @@
-<FORM METHOD="POST" NAME="input" enctype="multipart/form-data">
 <?php
+if (isset($_GET['pemohon']) && isset($_GET['perusahaan']) && isset($_GET['reklame'])) {
+	$data = true;
+	include 'koneksi.php';
+ 
+	/*
+	 * Ambil data pemohon
+	 */
+	$id_pemohon = $_GET['pemohon'];
+	$sql = "SELECT * FROM pemohon WHERE no_ktp='$id_pemohon'";
+	$query = mysql_query($sql);
+	$row = mysql_fetch_assoc($query);
+	$nama = $row['nama'];
+	$no_ktp = $row['no_ktp'];
+	$no_telp_pemohon = $row['no_telp'];
+	$alamat = $row['alamat'];
+
+	/*
+	 * Ambil data perusahaan
+	 */
+	$id_perusahaan = $_GET['perusahaan'];
+	$sql = "SELECT * FROM perusahaan WHERE id_perusahaan='$id_perusahaan'";
+	$query = mysql_query($sql);
+	$row = mysql_fetch_assoc($query);
+	$nama_perusahaan = $row['nama_perusahaan'];
+	$no_telp_perusahaan = $row['no_telp'];
+	$npwp = $row['NPWP'];
+	$jenis_perusahaan = $row['jenis_perusahaan'];
+	$jenis_usaha = $row['jenis_usaha'];
+
+	/*
+	 * Ambil data perusahaan
+	 */
+	$id_reklame = $_GET['reklame'];
+	$sql = "SELECT * FROM reklame WHERE id_reklame='$id_reklame'";
+	$query = mysql_query($sql);
+	$row = mysql_fetch_assoc($query);
+	$merek = $row['merek'];
+	$jenis_reklame = $row['jenis'];
+	$ukuran = $row['ukuran'];
 	
-	//Cek Tombol 
-	if (isset($_POST['Submit']))  
-	{
+	/*
+	 * Ambil data dipasang
+	 */
+	$sql = "SELECT * FROM dipasang WHERE id_reklame='$id_reklame'";
+	$query = mysql_query($sql);
+	$row = mysql_fetch_assoc($query);
+	$tanggal_awal = $row['tanggal_awal'];
+	$tanggal_akhir = $row['tanggal_akhir'];
 	
-	/*	//cek valudasi
-		if (isset($_POST['check']))
-		{
-			$strCheck = implode(",", $_POST['check']); 
-		}else{
-			$strCheck = "";
-		}
-		echo "Check in: " . $strCheck;
-		exit();
-	*/
-	
-	//Kirimkan Variabel
-		$no_ktp = $_POST['no_ktp'];
-		$id_petugas= $_POST['id_petugas'];
-		$validasi= $_POST['validasi'];
-	//validasi data jika nama dan pesan kosong
-		if (empty($_POST['no_ktp'])|| empty($_POST['id_petugas'])/* || ($_POST['kategori']=="--Pilih Kategori--") */) 
-		{
-			?>
-				<script language="JavaScript">
-				alert('Data Harap Dilengkapi');
-				</script>
-			<?php
-		}
-	
-	//Jika Validasi Terpenuhi
-		else
-		{
-			//Memanggil File Koneksi Database
-			include "koneksi.php";
-			//cek apakah id petugas sudah terdaftar
-			$sql = "SELECT * FROM petugas where id_petugas = $id_petugas";
-			$query = mysql_query($sql);
-			
-			//Masukan data ke Table Resi
-			$sql = "INSERT INTO `resi`(`tanggal`, `no_ktp`, `id_petugas`) VALUES (SYSDATE(),$no_ktp,$id_petugas)";
-			$query = mysql_query($sql);
-			
-			$sql = "UPDATE `pemohon` SET `status`='$validasi' WHERE no_ktp=$no_ktp";
-			$query = mysql_query($sql);
-			
-			if ($query)
-			{
-				?>
-					<script language="JavaScript">
-						alert('Data Berhasil diinput');
-					</script>
-				<?php
-			}
-			else
-			{
-				//Jika Gagal
-				?>
-					<script language="JavaScript">
-					alert('Data Gagal di input, Silahkan ulangi lagi');
-					</script>
-				<?php
-			}
+	/*
+	 * Submit
+	 */
+	if (isset($_POST['submit'])){
+		$id_petugas = $_POST['id_petugas'];
+		$nama_petugas = $_POST['nama_petugas'];
+		$status_pemohon = $_POST['status_pemohon'];
+		$status_perusahaan = $_POST['status_perusahaan'];
+		$status_reklame = $_POST['status_reklame'];
 		
+		$sql = "SELECT * FROM petugas where id_petugas = '$id_petugas' AND nama_petugas='$nama_petugas'";
+		$query = mysql_query($sql);
+		if (!empty(mysql_fetch_array($query, MYSQL_ASSOC))){
+			//update status pemohon
+			$sql = "UPDATE pemohon SET status='$status_pemohon' WHERE no_ktp='$no_ktp'";
+			$query = mysql_query($sql);
+			if (!$query) { echo "ERROR : Kesalahan saat memperbarui status pemohon"; }
+			
+			//update status perusahaan
+			$sql = "UPDATE perusahaan SET status='$status_perusahaan' WHERE id_perusahaan='$id_perusahaan'";
+			$query = mysql_query($sql);
+			if (!$query) { echo "ERROR : Kesalahan saat memperbarui status perusahaan"; }
+			
+			//update status reklame
+			$sql = "UPDATE reklame SET status='$status_reklame' WHERE id_reklame='$id_reklame'";
+			$query = mysql_query($sql);
+			if (!$query) { echo "ERROR : Kesalahan saat memperbarui status reklame"; }
+			
+			echo "Validasi Berhasil!";
+	    } else {
+			echo "ERROR : Petugas tidak terdaftar";
 		}
 	}
+}
 ?>
-
 <style type="text/css">
 <!--
-.style6 {font-family: "Times New Roman", Times, serif}
-.style7 {font-family: Verdana, Arial, Helvetica, sans-serif}
+.style6 {font-size: 14px}
+.style16 {font-family: "Times New Roman", Times, serif; font-size: 16; }
+.style17 {font-size: 16}
 -->
 </style>
-<script type="text/javascript">
-<!--
-function MM_jumpMenu(targ,selObj,restore){ //v3.0
-  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
-  if (restore) selObj.selectedIndex=0;
-}
-//-->
-</script>
+<FORM METHOD="POST" NAME="input" enctype="multipart/form-data">
 <table width="100%" border="0" align="center" valign="middle" cellpadding="0" cellspacing="0">
 		<tr height="30px" style="font-size:16px; color:white;">
 			<th colspan="4" bgcolor="#952b33">FORM VALIDASI</th>
 		</tr>
 </table>
 <form id="form2" name="form2" method="post" action="">
-  <table width="770" border="0">
+  <table width="772" border="0">
     <tr>
-      <td width="71">&nbsp;</td>
-      <td width="105">&nbsp;</td>
-      <td width="6">&nbsp;</td>
-      <td width="415">&nbsp;</td>
-      <td width="81">&nbsp;</td>
+      <td width="57">&nbsp;</td>
+      <td width="157">&nbsp;</td>
+      <td width="10">&nbsp;</td>
+      <td width="377">&nbsp;</td>
     </tr>
     <tr>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
-      <td>&nbsp;</td>
     </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td><span class="style6">No KTP</span></td>
-      <td>:</td>
-      <td><label>
-        <input type="text" name="no_ktp" id="nama" />
-      </label></td>
-      <td>&nbsp;</td>
-    </tr>
+    
     <tr>
       <td>&nbsp;</td>
       <td><span class="style6">ID Petugas</span></td>
@@ -119,7 +118,6 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
       <td><label>
         <input type="text" name="id_petugas" id="id_ptg" />
       </label></td>
-      <td>&nbsp;</td>
     </tr>
     <tr>
       <td>&nbsp;</td>
@@ -128,17 +126,8 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
       <td><label>
         <input type="text" name="nama_petugas" id="nama_ptg" />
       </label></td>
-      <td>&nbsp;</td>
     </tr>
     <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
@@ -146,105 +135,202 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td>VALIDASI</td>
+      <td><span class="style16">DATA PEMOHON</span></td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
+    </tr>
+    <tr>
       <td>&nbsp;</td>
+      <td><span class="style17"></span></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">Nama Perusahaan</span></td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $nama_perusahaan; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">No. KTP</span></td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $no_ktp; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">No. Telepon</span></td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $no_telp_pemohon; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">Alamat</span></td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $alamat; } ?></td>
     </tr>
   </table>
+  
   <label><br />
   </label>
-  <table width="699" border="0" method="post">
-    <tr>
-      <td width="95">&nbsp;</td>
-      <td width="20">&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="Nama Pemohon" checked="checked" id="check[]"/>
-      <label for="check[]">Nama Pemohon</label></td>
-      <td width="20">&nbsp;</td>
-      <td width="308"><input type="checkbox" name="check[]" value="NPWP" checked="checked" id="check[]"/>
-      <label for="check[]">NPWP</label></td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="No. KTP" checked="checked" id="check[]"/>
-      		<label for="check[]">No. KTP</label>      </td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="Jenis Perusahan" checked="checked" id="check[]"/>
-      <label for="check[]">Jenis Perusahan</label></td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="No. Telepon" checked="checked" id="check[]"/>
-      <label for="check[]">No. Telepon</label>      </td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="Jenis Usaha" checked="checked" id="check[]"/>
-      <label for="check[]">Jenis Usaha</label>      </td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="Alamat" checked="checked" id="check[]"/>
-      <label for="check[]">Alamat</label>      </td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="ID Reklame" checked="checked" id="check[]"/>
-      <label for="check[]">ID Reklame</label>      </td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="ID Perusahaan" checked="checked" id="check[]"/>
-      <label for="check[]">ID Perusahaan</label></td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="Merek Reklame" checked="checked" id="check[]"/>
-      <label for="check[]">Merek Reklame</label></td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="Nama Perusahaan" checked="checked" id="check[]"/>
-      <label for="check[]">Nama Perusahaan</label></td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="Ukuran Reklame" checked="checked" id="check[]"/>
-      <label for="check[]">Ukuran Reklame</label></td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="No. Telepon" checked="checked" id="check[]"/>
-      <label for="check[]">No. Telepon</label></td>
-      <td>&nbsp;</td>
-      <td><input type="checkbox" name="check[]" value="Jenis Reklame" checked="checked" id="check[]"/>
-      <label for="check[]">Jenis Reklame</label></td>
-    </tr>
-  </table>
-  <label><br />
-  </label>
+
   <table width="438" border="0">
     <tr>
       <td width="63">&nbsp;</td>
       <td width="144"><span class="style6">Status Validasi</span></td>
-      <td width="101"><select name="validasi" id="validasi" onchange="MM_jumpMenu('parent',this,0)">
+      <td width="101"><select name="status_pemohon" id="validasi" onchange="MM_jumpMenu('parent',this,0)">
         <option>Valid</option>
         <option>Tidak Valid</option>
       </select></td>
     </tr>
     <tr>
+    </tr>
+  </table>
+  
+ <table width="770" border="0" bordercolor="#000000">
+    <tr>
+      <td width="57">&nbsp;</td>
+      <td width="154">&nbsp;</td>
+      <td width="11">&nbsp;</td>
+      <td width="375">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
     </tr>
     <tr>
       <td>&nbsp;</td>
+      <td><span class="style16">DATA PERUSAHAAN</span></td>
+      <td>&nbsp;</td>
       <td>&nbsp;</td>
     </tr>
-    
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style17"></span></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">Nama Perusahaan</span></td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $nama_perusahaan; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">No. Telepon</span></td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $no_telp_perusahaan; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">NPWP</span></td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $npwp; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>Jenis Perusahaan</td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $jenis_perusahaan; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>Jenis Usaha</td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $jenis_usaha; } ?></td>
+    </tr>
   </table>
+  </br>
+  <table width="438" border="0">
+    <tr>
+      <td width="63">&nbsp;</td>
+      <td width="144"><span class="style6">Status Validasi</span></td>
+      <td width="101"><select name="status_perusahaan" id="validasi" onchange="MM_jumpMenu('parent',this,0)">
+        <option>Valid</option>
+        <option>Tidak Valid</option>
+      </select></td>
+    </tr>
+    <tr>
+    </tr>
+  </table>
+  </br>
+  <table width="770" border="0">
+    <tr>
+      <td width="57">&nbsp;</td>
+      <td width="154">&nbsp;</td>
+      <td width="11">&nbsp;</td>
+      <td width="375">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">DATA REKLAME</span></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style17"></span></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>Merek Reklame</td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $merek; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">Tanggal Awal</span></td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $tanggal_awal; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><span class="style16">Tanggal Akhir</span></td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $tanggal_akhir; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>Jenis Reklame</td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $jenis_reklame; } ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>Ukuran Reklame</td>
+      <td>:</td>
+      <td><?php if (isset($data)) { echo $ukuran; } ?></td>
+    </tr>
+  </table>
+  
+  <table width="438" border="0">
+    <tr>
+      <td width="63">&nbsp;</td>
+      <td width="144"><span class="style6">Status Validasi</span></td>
+      <td width="101"><select name="status_reklame" id="validasi" onchange="MM_jumpMenu('parent',this,0)">
+        <option>Valid</option>
+        <option>Tidak Valid</option>
+      </select></td>
+    </tr>
+    <tr>
+    </tr>
+  </table>
+  </br>
   <table width="438" border="0">
     <tr>
       <td width="80">&nbsp;</td>
-      <td width="348"><input type="submit" name="Submit" value="Submit" id="tombol">
+      <td width="348"><input type="submit" name="submit" value="Submit" id="tombol">
 	  &nbsp;<input type="reset" name="reset" value="Reset" id="tombol"></td>
       
     </tr>

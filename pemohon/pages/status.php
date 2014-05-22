@@ -1,3 +1,5 @@
+
+
 <style type="text/css">
 <!--
 .style1 {font-size: 12px}
@@ -5,11 +7,11 @@
 </style>
 <table width="100%" border="0" align="center" valign="middle" cellpadding="0" cellspacing="0">
 		<tr height="30px" style="font-size:16px; color:white;">
-			<th colspan="4" bgcolor="#952b33">LIHAT DATA</th>
+			<th colspan="4" bgcolor="#952b33">LIHAT STATUS</th>
 		</tr>
 </table>
 &nbsp;&nbsp;&nbsp;
-<p><strong>Pencarian Nomor Pemasangan</strong><br>
+<p><strong>Pencarian Nomor Resi</strong><br>
   <br>
 </p>
 <form action="" method="post" name="pencarian" >
@@ -20,75 +22,110 @@
 <form border="1">
 <div align='center'><h3>STATUS VALIDASI PEMOHON PEMASANGAN REKLAME</h3></div>
 &nbsp;
-<table border='0' width='100%'>
+<table border='0' width='94%'>
+<?php
+		$data=false;
+        if (isset($_POST['submit']))  {
+		$resi= $_POST['search'];
+		
+		$data=true;
+			
+                    include 'koneksi.php';
+					
+					$sql = "select p.nama_perusahaan,r.merek,o.nama,o.status,p.status,r.status,r.id_reklame from perusahaan p,reklame r,pemohon o where p.id_perusahaan=r.id_perusahaan AND p.id_perusahaan=o.id_perusahaan AND r.id_reklame in(select id_reklame from dipasang d where d.id_pemasangan in(select id_pemasangan from resi where no_resi=$resi))";
+                    
+					$query = mysql_query($sql);
+							                    
+	                    while($hasil = mysql_fetch_array($query, MYSQL_NUM)){
+                        
+                        $nama_perusahaan 		= $hasil[0];
+	                    $merek 			    	= $hasil[1];
+						$nama 					= $hasil[2];
+                        
+                        $status_pemohon 		= $hasil[3];
+						$status_perusahaan 		= $hasil[4];
+						$status_reklame 		= $hasil[5];
+						$id_reklame 			= $hasil[6];
+						
+						
+					$sql = "SELECT status FROM disurvey s WHERE s.id_pemasangan in(SELECT id_pemasangan FROM dipasang d WHERE d.id_reklame='$id_reklame')";
+					$query = mysql_query($sql);
+					$row = mysql_fetch_array($query, MYSQL_NUM);
+					$status_survey 			= empty($row[0]) ? "Belum diverifikasi" : $row[0];
+              
+					
+                    }
+}        
+                ?>
 <tr>
-<td width='243'><span class="style1">NAMA PEMOHON / ID REKLAME</span></td>
-<td width='10'>:</td>
-<td width="808">&nbsp;</td>
+  <td width='49'>&nbsp;</td>
+<td width='295'><span class="style1">NAMA PERUSAHAAN</span></td>
+<td width='18'>:</td>
+<td width="617"><?php if ($data){ echo "$nama_perusahaan"; }?></td>
 </tr>
 <tr>
-<td width='243'><span class="style1">NAMA PERUSAHAAN</span></td>
-<td width='10'>:</td>
-<td>&nbsp;</td>
+  <td width='49'>&nbsp;</td>
+<td width='295'><span class="style1">MEREK </span></td>
+<td width='18'>:</td>
+<td><?php if ($data){echo "$merek";}?></td>
 </tr>
 <tr>
-<td width='243'><span class="style1">PETUGAS</span></td>
-<td width='10'>:</td>
-<td>&nbsp;</td>
-</tr>
-</table><br>
-<table border='0' width='100%'>
-<tr>
-<td width='243'><span class="style1">STATUS VALIDASI DATA</span></td>
-<td width='10'>:</td>
-<td width="808"><span class="style1">VALID</span></td>
+  <td width='49'>&nbsp;</td>
+<td width='295'><span class="style1">NAMA PEMOHON</span></td>
+<td width='18'>:</td>
+<td><?php if ($data){echo "$nama";}?></td>
 </tr>
 <tr>
-<td width='243'><span class="style1">STATUS SURVEY LAPANGAN</span></td>
-<td width='10'>:</td>
-<td><span class="style1">VALID</span></td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
 </tr>
 <tr>
-<td width='243'><span class="style1">STATUS PERIZINAN</span></td>
-<td width='10'>:</td>
-<td><span class="style1">VALID</span></td>
+  <td>&nbsp;</td>
+  <td><span class="style1">STATUS</span></td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
 </tr>
 <tr>
-<td width='243'><span class="style1">STATUS PEMBAYARAN</span></td>
-<td width='10'>:</td>
-<td><span class="style1">BELUM LUNAS</span></td>
+  <td>&nbsp;</td>
+  <td><span class="style1">PEMOHON</span></td>
+  <td>:</td>
+  <td><?php if ($data){echo "$status_pemohon";}?></td>
 </tr>
-
-</table><br>
-
-
-<table cellspacing='1' border='1' id='table' align='center' width='100%'>
-<thead>
 <tr>
-	<th width='20px'><span class="style1">No</span></th>
-	<th><span class="style1">Proses</span></th>
-	<th><span class="style1">STATUS</span></th>
+  <td>&nbsp;</td>
+  <td><span class="style1">PERUSAHAAN</span></td>
+  <td>:</td>
+  <td><?php if ($data){echo "$status_perusahaan";}?></td>
 </tr>
-</thead>
-<tbody>
 <tr>
-		<td align='center' width='20px'><span class="style1">1</span></td>
-		<td><span class="style1">PROSES PENGISIAN FORMULIR</span></td>
-		<td align='center'><span class="style1">SUDAH</span></td>
-	</tr><tr>
-		<td align='center' width='20px'><span class="style1">2</span></td>
-		<td><span class="style1">PROSES PEMBAYARAN</span></td>
-		<td align='center'><span class="style1">SUDAH</span></td>
-	</tr><tr>
-		<td align='center' width='20px'><span class="style1">3</span></td>
-		<td><span class="style1">PROSES PENCETAKAN SURAT IZIN</span></td>
-		<td align='center'><span class="style1">SUDAH</span></td>
-	</tr></tbody></table>
+  <td>&nbsp;</td>
+  <td><span class="style1">REKLAME</span></td>
+  <td>:</td>
+  <td><?php if ($data){echo "$status_reklame";}?></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td><span class="style1">SURVEY</span></td>
+  <td>:</td>
+  <td><?php if ($data){echo "$status_survey";}?></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td><a href="javascript:window.print()"><img src='asset/printer.png' width='50' height='50' align="right" title='cetak status'></a></td>
+</tr>
+</table>
 <br>
-	<div>
-	  <p><b>catatan : </b></p>
-	  <p>1.Silahkan Mengisi data / input token di Menu Pembayaran untuk mengubah Status Pembayaran Anda menjadi LUNAS</p>
-	  <p>2.Status ini di isi oleh petugas yang bersangkutan</p>
-	</div>
-  <br>
+<br>
+<br>
+<br>
 </form>

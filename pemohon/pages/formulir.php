@@ -91,12 +91,12 @@ if (isset($_POST['submit']))  {
 		 * - Jika sudah : Update
 		 * - Jika belum : insert
 		 */
-		$sql = "SELECT * FROM reklame WHERE merek='$merek' AND ukuran='$ukuran' AND id_perusahaan='$id_perusahaan'";
+		$sql = "SELECT * FROM reklame WHERE merek='$merek' AND id_perusahaan='$id_perusahaan'";
 		$query = mysql_query($sql);
 		if (empty(mysql_fetch_array($query, MYSQL_ASSOC))){ 
-			$sql = "INSERT INTO reklame VALUES(NULL, '$merek','$jenis','$ukuran','$id_perusahaan', 'Belum diverifikasi')";
+			$sql = "INSERT INTO reklame VALUES(NULL, '$merek','$jenis','$ukuran','$id_perusahaan','Belum diverifikasi')";
 		} else {
-			$sql = "UPDATE reklame SET jenis='$jenis', status='Belum diverifikasi' WHERE merek='$merek' AND ukuran='$ukuran' AND id_perusahaan='$id_perusahaan'";
+			$sql = "UPDATE reklame SET jenis='$jenis', status='Belum diverifikasi', ukuran='$ukuran' WHERE merek='$merek' AND id_perusahaan='$id_perusahaan'";
 		}
 		$query=mysql_query($sql);
 		if (!$query){
@@ -129,14 +129,14 @@ if (isset($_POST['submit']))  {
 		 * - jika sudah : update
 		 * - jika belum : insert
 		 */
-		$sql = "SELECT id_reklame FROM reklame WHERE merek='$merek' AND ukuran='$ukuran' AND id_perusahaan='$id_perusahaan'";
+		$sql = "SELECT id_reklame FROM reklame WHERE merek='$merek' AND id_perusahaan='$id_perusahaan'";
 		$query = mysql_query($sql);
-		$result = mysql_fetch_row($query);
+		$result = mysql_fetch_array($query, MYSQL_NUM);
 		$id_reklame = $result[0];
 
 		$sql = "SELECT id_lokasi FROM lapangan WHERE kelurahan='$kelurahan' AND kecamatan='$kecamatan'";
 		$query = mysql_query($sql);
-		$result = mysql_fetch_row($query);
+		$result = mysql_fetch_array($query, MYSQL_NUM);
 		$id_lokasi = $result[0];
 		
 		$sql = "SELECT * FROM dipasang where id_reklame='$id_reklame'";
@@ -190,7 +190,7 @@ if (isset($_POST['submit']))  {
   </h1>
   <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" id="tabel2" >	
 	<tr height="30px" style="font-size:16px; color:white;">
-			<th colspan="4" bgcolor="#952b33">REGISTRASI</th>
+			<th colspan="4" bgcolor="#952b33">ISI FORMULIR</th>
 	</tr>
 	</tr>
     	
@@ -259,14 +259,12 @@ if (isset($_POST['submit']))  {
 		<td width="50" height="30" >&nbsp;</td>
 		<td width="0" valign="middle">JENIS PERUSAHAAN</td>
 		<td>
-			<?php
-			include "koneksi.php";
-			?>
 			<select name="jenis_perusahaan" id="kategori" width="50">
 				<option>--Pilih Jenis Perusahaan--</option>
 				<option>Manufaktur</option>
 				<option>Dagang</option>
 				<option>Jasa</option>
+                <option>Hiburan</option>
 			</select>		</td>
 	</tr>
 		<tr>
@@ -275,18 +273,15 @@ if (isset($_POST['submit']))  {
 		<td width="50" height="30" >&nbsp;</td>
 		<td width="0" valign="middle">JENIS USAHA</td>
 		<td>
-			<?php
-			include "koneksi.php";
-			?>
 			<select name="jenis_usaha" id="sub" width="50" >
-				<option>--Pilih Jenis Usaha--</option>
-				<option>Computer and Software</option>
-				<option>Hiburan</option>
-				<option>Asuransi</option>
-				<option>Perbankan</option>
-				<option>Tambang</option>
-				<option>Makanan dan Minuman</option>
-			</select>		</td>
+              <option>--Pilih Jenis Usaha--</option>
+              <option>Computer and Software</option>
+              <option>Hiburan</option>
+              <option>Asuransi</option>
+              <option>Perbankan</option>
+              <option>Tambang</option>
+              <option>Makanan dan Minuman</option>
+            </select></td>
 	</tr>
 			<tr>
 			  <td height="41">&nbsp;</td>
@@ -320,20 +315,11 @@ if (isset($_POST['submit']))  {
 					<img valign="bottom" name="popcal" src="menu/calender/calender.png" alt="" width="20" height="20"></a>				</td>
 		</tr>
 		<tr>
-		  <td>&nbsp;</td>
+		  <td height="23">&nbsp;</td>
 		  <td>&nbsp;</td>
 		  <td>&nbsp;</td>
     </tr>
-		<tr>
-      <td>&nbsp;</td>
-      <td><strong>LAPANGAN</strong></td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
+		
     <tr>
       <td>&nbsp;</td>
       <td>KELURAHAN</td>
@@ -371,9 +357,6 @@ if (isset($_POST['submit']))  {
 		<td width="50" height="30" >&nbsp;</td>
 		<td width="0" valign="middle">JENIS</td>
 		<td>
-			<?php
-			include "koneksi.php";
-			?>
 			<select name="jenis" id="kategori" width="50">
 				<option>--Pilih Kategori--</option>
 				<option>Komersil</option>

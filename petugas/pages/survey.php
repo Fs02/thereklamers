@@ -8,8 +8,13 @@ if (isset($_POST['submit']))  {
 	$id_pemasangan = $_POST['id_pemasangan'];
 	
 	include ROOT_DIR."koneksi.php";	
-	$sql = "INSERT INTO disurvey  VALUES (NULL,'$tgl','$status','$id_pemasangan','$id_pegawai')";
-	echo $sql;
+	$sql = "SELECT * FROM disurvey where id_pemasangan = '$id_pemasangan'";
+	$query = mysql_query($sql);
+	if (empty(mysql_fetch_array($query, MYSQL_ASSOC))){
+		$sql = "INSERT INTO disurvey  VALUES (NULL,'$tgl','$status','$id_pemasangan','$id_pegawai')";
+	} else {
+		$sql = "UPDATE disurvey SET status='$status' WHERE id_pemasangan='$id_pemasangan'";
+	}
 	$query = mysql_query($sql);
 		
 	if ($query)
@@ -70,7 +75,7 @@ if (isset($_POST['submit']))  {
       <td><span class="style6">ID Pegawai</span></td>
       <td>:</td>
       <td><label>
-      <input type="text" name="id_pegawai" id="id_pegawai" />
+      <input type="text" name="id_pegawai" id="id_pegawai"/>
       </label></td>
       <td>&nbsp;</td>
     </tr>
@@ -79,7 +84,7 @@ if (isset($_POST['submit']))  {
       <td>&nbsp;</td>
       <td>ID Pemasangan</td>
       <td>&nbsp;</td>
-      <td><input type="text" name="id_pemasangan" id="nama_pegawai2" /></td>
+      <td><input type="text" name="id_pemasangan" id="nama_pegawai2" value="<?php if (isset($_GET['id_pemasangan'])) { echo $_GET['id_pemasangan']; } ?>"/></td>
       <td>&nbsp;</td>
     </tr>
     
@@ -88,7 +93,7 @@ if (isset($_POST['submit']))  {
       <td><span class="style6">Tanggal Survey</span></td>
       <td>&nbsp;</td>
       <td><input type="text" name="tgl" title="dd-mm-yyyy" size="15" valign="top" value="" />
-        <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.edit.tgl);return false;" > <img src="menu/calender/calender.png" alt="" name="popcal" width="20" height="20" id="popcal" valign="bottom" /></a> </td>
+        <a href="javascript:void(0)" onclick="if(self.gfPop)gfPop.fPopCalendar(document.edit.tgl);return false;" > <img src="../../../thereklamers/petugas/pages/menu/calender/calender.png" alt="" name="popcal" width="20" height="20" id="popcal" valign="bottom" /></a> </td>
       <td>&nbsp;</td>
     </tr>
   </table>

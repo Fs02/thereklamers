@@ -10,26 +10,6 @@ define('ROOT_DIR',dirname(__FILE__) . '/');
 		.style1 {color: #952b33}
         </style>
 		<script type="text/javascript" src="asset/jquery.js"></script>
-		<script type="text/javascript">
-			var htmlobjek;
-			$(document).ready(function(){
-			  //apabila terjadi event onchange terhadap object <select id=propinsi>
-			  $("#kategori").change(function(){
-				var prop = $("#kategori").val();
-				$.ajax({
-					url: "asset/ambil_kategori.php",
-					data: "kategori="+prop,
-					cache: false,
-					success: function(msg){
-						//jika data sukses diambil dari server kita tampilkan
-						//di <select id=kota>
-						$("#sub").html(msg);
-					}
-				});
-			  });
-			});
-		</script>
-
 	<?
 		$link="10.88.193.211";
 	?>

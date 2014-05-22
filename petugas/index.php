@@ -8,11 +8,7 @@ define('ROOT_DIR',dirname(__FILE__) . '/');
 		<link href="asset/style.css" rel="stylesheet" type="text/css">
 		<style type="text/css">
 		.style1 {color: #952b33}
-        .style2 {
-	font-size: 16px;
-	font-weight: bold;
-}
-        </style>
+</style>
 		<script type="text/javascript" src="asset/jquery.js"></script>
 		<script type="text/javascript">
 			var htmlobjek;
@@ -94,8 +90,8 @@ define('ROOT_DIR',dirname(__FILE__) . '/');
 				</tr>
        			<tr id="utama"> <td height="32">
 					<strong><img src="asset/wl.jpg" width="30" height="30" align="middle"> 
-					<a color="white" href="index.php?page=daftar" title="Halaman Awal" style="text-decoration: none;" ><font color="white">DAFTAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a></strong></td>
-				</tr>
+					<a color="white" href="index.php?page=daftar" title="Halaman Awal" style="text-decoration: none;" ><font color="white">PERIZINAN</font><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a></strong></td>
+			  </tr>
 				<tr id="utama"> <td>
 					<strong><img src="asset/lihat.png" width="30" height="30" align="middle"> 
 					<a href="index.php?page=validasi" title="Validasi" style="text-decoration: none;" ><font color="white">VALIDASI</font><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a></strong><br> 
@@ -106,11 +102,7 @@ define('ROOT_DIR',dirname(__FILE__) . '/');
 					<a href="index.php?page=survey" title="Survey" style="text-decoration: none;" ><font color="white">SURVEY</font><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a></strong><br>
 					</td>
 				</tr>	
-					<tr id="utama"> <td>
-						<strong><img src="asset/save.png" width="30" height="30" align="middle">
-						<a href="index.php?page=perizinan" title="Perizinan" style="text-decoration: none;" ><font color="white">PERIZINAN</font><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a></strong><br>
-						</td>
-					</tr>
+					
 				<tr id="utama"> <td>
 					<strong><img src="asset/about.png" width="30" height="30" align="middle"> 
 					<a href="index.php?page=faq" title="FAQ" style="text-decoration: none;" ><font color="white"> FAQ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a></strong><br>

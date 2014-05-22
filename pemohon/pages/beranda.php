@@ -1,6 +1,6 @@
 <table width="100%" border="0" align="center" valign="middle" cellpadding="0" cellspacing="0">
 		<tr height="30px" style="font-size:16px; color:white;">
-			<th colspan="4" bgcolor="#952b33">HOME</th>
+			<th colspan="4" bgcolor="#952b33">BERANDA</th>
 		</tr>
 </table>
 
