@@ -13,7 +13,7 @@
 		
 		<tr>
 			<td></td>
-			<td>1. Panduan Penggunaan Web / User Manual</td><td><a target="blank" href="files/Convert Imgae to PDF.pdf">[Unduh]</a></td>
+			<td>1. Panduan Penggunaan Web / User Manual</td><td><a target="blank" href="files/manual.pdf">[Unduh]</a></td>
 			<td></td>
 		</tr>
 		<tr>

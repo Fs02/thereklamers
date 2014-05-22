@@ -13,8 +13,8 @@
 		
 		<tr>
 			<td></td>
-			<td>Panduan Penggunaan Web / User Manual</td>
-		  <td><a target="blank" href="files/FAQ.docx">[Download]</a></td>
+			<td>1. Panduan Penggunaan Web / User Manual</td>
+		  <td><a target="blank" href="files/manual.pdf">[Download]</a></td>
 			<td></td>
 		</tr>
 		<tr>

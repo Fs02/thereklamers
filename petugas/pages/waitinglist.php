@@ -67,7 +67,7 @@
 					$row_ = mysql_fetch_array($query_, MYSQL_NUM);
 					$id_pemasangan = $row_[0];
                     echo "<tr>
-							<td><span class='style3'>$no</span></td>
+							<td><span class='style3'><center>$no</center></span></td>
 							<td><span class='style3'>$nama_perusahaan</span></td>
 							<td><span class='style3'>$merek</span></td>
 							<td><span class='style3'>$nama_pemohon</span></td>
@@ -90,12 +90,24 @@
 		<tr>
 			<td height="30px"></td>
 			<td><p>Keterangan :</p>
-		    <p class="style3"><span class="style2"><img src="asset/pemohon.png" align="center" width="18" height="18"  /></span> Status Pemohon</p>
-		    <p class="style3"><span class="style2"><img src="asset/perusahaan.png" align="center" width="18" height="18" /></span> Status Perusahaan</p>
-            <p class="style3"><span class="style2"><img src="asset/reclame.png" align="center" width="18" height="18" /></span> Status Reklame</p>
-            <p class="style3"><span class="style2"><img src="asset/survey.png" align="center" width="18" height="18" /></span> Status Survey</p>
-          <p class="style3"><span class="style2"><img src="asset/email.png" align="center" width="18" height="18" /></span> Kirimkan Email</p></td>
-		  <td></td>
+			  <table width="445" border="0">
+                <tr>
+                  <td width="141"><span class="style3"><span class="style2"><img src="asset/pemohon.png" align="center" width="16" height="16"  /></span> Status Pemohon</span></td>
+                  <td width="121"><span class="style3"><span class="style2"><img src="asset/survey.png" align="center" width="16" height="16" /></span> Status Survey</span></td>
+                  <td width="161"><span class="style3"><span class="style2"><img src="asset/invalid.jpg" align="center" width="16" height="16" /></span> Status Tidak Valid</span></td>
+                </tr>
+                <tr>
+                  <td><span class="style3"><span class="style2"><img src="asset/perusahaan.png" align="center" width="16" height="16" /></span> Status Perusahaan</span></td>
+                  <td><span class="style3"><span class="style2"><img src="asset/email.png" align="center" width="16" height="16" /></span> Kirimkan Email</span></td>
+                  <td><span class="style3"><span class="style2"><img src="asset/unknown.jpg" align="center" width="16" height="16" /></span> Status Belum diverifikasi</span></td>
+                </tr>
+                <tr>
+                  <td><span class="style3"><span class="style2"><img src="asset/reclame.png" align="center" width="16" height="16" /></span> Status Reklame</span></td>
+                  <td><span class="style3"><span class="style2"><img src="asset/valid.jpg" align="center" width="16" height="16" /></span> Status Valid</span></td>
+                  <td>&nbsp;</td>
+                </tr>
+              </table>		    </td>
+			<td></td>
 		  <td></td>
 		</tr>
 </table>
